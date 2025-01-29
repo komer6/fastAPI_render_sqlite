@@ -43,12 +43,12 @@ def get_db():
         db.close()
 
 # GET endpoint to retrieve all dogs
-@app.get("/dogs", response_model=list[DogOut])
+@app.get("/", response_model=list[DogOut])
 def get_dogs(db: Session = Depends(get_db)):
     return db.query(Dog).all()
 
 # POST endpoint to add a new dog
-@app.post("/dogs", response_model=DogOut)
+@app.post("/", response_model=DogOut)
 def create_dog(dog: DogCreate, db: Session = Depends(get_db)):
     db_dog = Dog(name=dog.name, breed=dog.breed, color=dog.color)
     try:
