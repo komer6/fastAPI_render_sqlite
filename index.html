@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog API</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+    <h1>Dog Information</h1>
+
+    <!-- Form to add a new dog -->
+    <h2>Add a New Dog</h2>
+    <form id="dogForm">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="breed">Breed:</label><br>
+        <input type="text" id="breed" name="breed" required><br>
+        <label for="color">Color:</label><br>
+        <input type="text" id="color" name="color" required><br><br>
+        <button type="submit">Add Dog</button>
+    </form>
+
+    <h2>List of Dogs</h2>
+    <ul id="dogList">
+        <!-- Dogs will be listed here -->
+    </ul>
+
+    <script>
+        // Get the list of dogs when the page loads
+        window.onload = function() {
+            fetchDogs();
+        };
+
+        // Fetch all dogs from the API
+        function fetchDogs() {
+            axios.get("http://127.0.0.1:8000/")
+                .then(response => {
+                    const dogs = response.data;
+                    const dogList = document.getElementById("dogList");
+                    dogList.innerHTML = '';  // Clear the list first
+                    dogs.forEach(dog => {
+                        const li = document.createElement("li");
+                        li.textContent = `Name: ${dog.name}, Breed: ${dog.breed}, Color: ${dog.color}`;
+                        dogList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error("There was an error fetching the dogs!", error);
+                });
+        }
+
+        // Handle the form submission to add a new dog
+        document.getElementById("dogForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the form from refreshing the page
+
+            const newDog = {
+                name: document.getElementById("name").value,
+                breed: document.getElementById("breed").value,
+                color: document.getElementById("color").value,
+            };
+
+            axios.post("http://127.0.0.1:8000/", newDog)
+                .then(response => {
+                    console.log("Dog added:", response.data);
+                    fetchDogs(); // Refresh the dog list after adding
+                })
+                .catch(error => {
+                    console.error("There was an error adding the dog!", error);
+                });
+        });
+    </script>
+</body>
+</html>
