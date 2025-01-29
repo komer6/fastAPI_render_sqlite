@@ -29,11 +29,12 @@ app = FastAPI()
 # Allow only http://localhost:5500
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://komer6.github.io/idex_for_render_fast_API_sqlite/"],  # Specify the allowed origin
+    allow_origins=["https://komer6.github.io"],  # Correct origin
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
 )
+
 
 # Pydantic model for request/response
 class DogCreate(BaseModel):
